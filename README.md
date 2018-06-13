@@ -61,7 +61,7 @@ This package can be installed using pip
 
     pip install git+https://github.com/astudillor/idrs.git
 
-or adding the package directory to the PYTHONPATH.
+or adding the package directory route to the PYTHONPATH variable.
 
 ## License
 
