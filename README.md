@@ -54,6 +54,15 @@ with the Krylov methods implemented in Scipy.
     .. [3] This file is a translation of the following MATLAB implementation:
             http://ta.twi.tudelft.nl/nw/users/gijzen/idrs.m
 
-# License
+
+## Installation
+
+This package can be installed using pip
+
+    pip install git+https://github.com/astudillor/idrs.git
+
+or adding the package directory to the PYTHONPATH.
+
+## License
 
 This software is distributed under the [MIT License](http://opensource.org/licenses/MIT).
