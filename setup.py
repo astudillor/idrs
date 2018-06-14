@@ -14,7 +14,8 @@ setuptools.setup(
     description="IDR method for solving systems of linear equations",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="",
+    url="https://github.com/astudillor/idrs",
+    install_requires=['numpy (>=1.11)', 'scipy (>=0.17)'],
     packages=setuptools.find_packages(),
     zip_safe=False
 )
