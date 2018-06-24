@@ -31,7 +31,7 @@ __all__ = ['idrs']
 
 
 def idrs(A, b, x0=None, tol=1e-5, s=4, maxiter=None,
-         M=None, callback=None):
+         M=None, callback=None, options=None):
     """
     Use Induced Dimension Reduction method [IDR(s)] to solve A x = b
 
@@ -120,9 +120,14 @@ def idrs(A, b, x0=None, tol=1e-5, s=4, maxiter=None,
     angle = 0.7
     G = np.zeros((n, s), dtype=xtype)
     U = np.zeros((n, s), dtype=xtype)
+    inispace = False
+    if options is not None and 'U0' in options:
+        U = options['U0']
+        inispace = True
     Ms = np.eye(s, dtype=xtype)
     om = 1.0
     iter_ = 0
+    jj = 0
 
     # Main iteration loop, build G-spaces:
     while rnrm >= tolb and iter_ < maxiter:
@@ -130,12 +135,18 @@ def idrs(A, b, x0=None, tol=1e-5, s=4, maxiter=None,
         f = P.dot(r)
         for k in range(0, s):
             # Solve small system and make v orthogonal to P:
-            c = np.linalg.solve(Ms[k:s, k:s], f[k:s])
-            v = r - G[:, k:s].dot(c)
-            # Preconditioning:
-            v = psolve(v)
-            # Compute new U(:,k) and G(:,k), G(:,k) is in space G_j
-            U[:, k] = axpy(v, U[:, k:s].dot(c), None, om)
+            v = r
+            if jj > 0:
+                c = np.linalg.solve(Ms[k:s, k:s], f[k:s])
+                v = v - G[:, k:s].dot(c)
+                # Preconditioning:
+                v = psolve(v)
+                # Compute new U(:,k) and G(:,k), G(:,k) is in space G_j
+                U[:, k] = axpy(v, U[:, k:s].dot(c), None, om)
+            elif not inispace:
+                # Preconditioning:
+                U[:, k] = psolve(v)
+
             # Matrix-vector product
             G[:, k] = matvec(U[:, k])
             # Bi-Orthogonalize the new basis vectors:
@@ -170,6 +181,7 @@ def idrs(A, b, x0=None, tol=1e-5, s=4, maxiter=None,
         # Note: r is already perpendicular to P so v = r
         if rnrm < tolb or iter_ >= maxiter:
             break
+        jj += 1
         # Preconditioning:
         v = psolve(r)
         # Matrix-vector product
