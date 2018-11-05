@@ -59,7 +59,7 @@ with the Krylov methods implemented in Scipy.
 
 This package can be installed using pip
 
-    pip install git+https://github.com/astudillor/idrs.git
+    pip install git+https://github.com/astudillor/idrs.git@/enhanced_init_space
 
 or adding the package directory route to the PYTHONPATH variable.
 
